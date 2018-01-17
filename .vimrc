@@ -23,7 +23,8 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'bitc/vim-bad-whitespace'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'nvie/vim-flake8'
-" Plugin 'morhetz/gruvbox'
+Plugin 'NLKNguyen/papercolor-theme'
+Plugin 'morhetz/gruvbox'
 " Plugin 'flazz/vim-colorschemes'
 " plugin from http://vim-scripts.org/vim/scripts.html
 " Plugin 'L9'
@@ -98,7 +99,7 @@ let g:NERDTreeWinPos = "right"
 " enable dark mode
 set t_Co=256
 set background=dark
-" colorscheme gruvbox
+colorscheme gruvbox
 syntax enable
 
 
