@@ -14,32 +14,14 @@ Plugin 'VundleVim/Vundle.vim'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
-" Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'bitc/vim-bad-whitespace'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'nvie/vim-flake8'
-Plugin 'NLKNguyen/papercolor-theme'
 Plugin 'morhetz/gruvbox'
-" Plugin 'flazz/vim-colorschemes'
-" plugin from http://vim-scripts.org/vim/scripts.html
-" Plugin 'L9'
-" Git plugin not hosted on GitHub
-" Plugin 'git://git.wincent.com/command-t.git'
-" git repos on your local machine (i.e. when working on your own plugin)
-" Plugin 'file:///home/gmarik/path/to/plugin'
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Install L9 and avoid a Naming conflict if you've already installed a
-" different version somewhere else.
-" Plugin 'ascenator/L9', {'name': 'newL9'}
-" Bundle 'https://github.com/freeo/vim-kalisi'
-
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -77,9 +59,6 @@ au BufNewFile,BufRead *.py
 	\ set autoindent |
 	\ set fileformat=unix
 
-" python highlighting
-" let python_highlight_all=1
-" syntax on
 
 " Nerdtree commands
 
@@ -96,6 +75,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 let g:NERDTreeWinPos = "right"
 
 
+" Gruvbox colorscheme
 " enable dark mode
 set t_Co=256
 set background=dark
@@ -104,11 +84,26 @@ syntax enable
 
 
 " Simpylfold
-"
+
 " show docstrings in preview
 let g:SimpylFold_docstring_preview=1
 
+" don't fold docstrings
+let g:SimpylFold_fold_docstring=0
+let b:SimpylFold_fold_docstring=0
+
+" don't fold imports
+let g:SimpylFold_fold_import=0
+let b:SimpylFold_fold_import=0
+
+
 " YouCompleteMe
-"
+
 " Auto close completion window
 let g:ycm_autoclose_preview_window_after_completion=1
+
+
+" Syntastic
+
+" Ignore line length errors
+let g:syntastic_python_flake8_args='--ignore=E501'
