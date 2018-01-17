@@ -59,6 +59,11 @@ au BufNewFile,BufRead *.py
 	\ set autoindent |
 	\ set fileformat=unix
 
+" jump to previous location
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g`\"" | endif
+endif
 
 " Nerdtree commands
 
