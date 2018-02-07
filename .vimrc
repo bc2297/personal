@@ -17,11 +17,11 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'vim-scripts/indentpython.vim'
-Plugin 'Valloric/YouCompleteMe'
+" Plugin 'Valloric/YouCompleteMe'
 Plugin 'bitc/vim-bad-whitespace'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'nvie/vim-flake8'
-Plugin 'morhetz/gruvbox'
+" Plugin 'morhetz/gruvbox'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -82,9 +82,9 @@ let g:NERDTreeWinPos = "right"
 
 " Gruvbox colorscheme
 " enable dark mode
-set t_Co=256
-set background=dark
-colorscheme gruvbox
+" set t_Co=256
+" set background=dark
+" colorscheme gruvbox
 syntax enable
 
 
