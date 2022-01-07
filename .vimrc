@@ -20,8 +20,9 @@ Plugin 'vim-scripts/indentpython.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'bitc/vim-bad-whitespace'
 Plugin 'vim-syntastic/syntastic'
-Plugin 'nvie/vim-flake8'
+" Plugin 'nvie/vim-flake8'
 Plugin 'morhetz/gruvbox'
+Plugin 'dense-analysis/ale'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -39,6 +40,7 @@ filetype plugin indent on    " required
 
 " Show line numbers
 set number
+set colorcolumn=119
 
 " Simple pane navigation
 nnoremap <C-J> <C-W><C-J>
@@ -109,6 +111,17 @@ let g:ycm_autoclose_preview_window_after_completion=1
 
 
 " Syntastic
-
+" autocmd BufWritePost *.py call Flake8()
 " Ignore line length errors
-let g:syntastic_python_flake8_args='--ignore=E501'
+let g:syntastic_python_flake8_args = "--ignore=E501,W503,E702"
+let g:syntastic_python_flake8_args = "--max-line-length=120"
+let g:syntastic_python_pyflakes_exe = 'python3 -m pyflakes'
+
+" ale linter thing
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\}
+" let g:ale_linters_explicit = 1
+let g:ale_python_flake8_options = "--ignore=E702 --max-line-length=120"
+let g:ale_sign_error = '❌'
+let g:ale_sign_warning = '⚠️'
