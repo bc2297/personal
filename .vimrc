@@ -19,7 +19,7 @@ Plugin 'tmhedberg/SimpylFold'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'bitc/vim-bad-whitespace'
-Plugin 'vim-syntastic/syntastic'
+" Plugin 'vim-syntastic/syntastic'
 " Plugin 'nvie/vim-flake8'
 Plugin 'morhetz/gruvbox'
 Plugin 'dense-analysis/ale'
@@ -67,6 +67,8 @@ if has("autocmd")
     \| exe "normal! g`\"" | endif
 endif
 
+let g:python3_host_prog = '/usr/local/opt/python@3.10/libexec/bin/python'
+
 " Nerdtree commands
 
 " Open nerdtree automatically
@@ -108,13 +110,17 @@ let b:SimpylFold_fold_import=0
 
 " Auto close completion window
 let g:ycm_autoclose_preview_window_after_completion=1
+let g:ycm_python_binary_path = '/usr/local/opt/python@3.10/libexec/bin/python'
+let g:ycm_python_interpreter_path = '/usr/local/opt/python@3.10/libexec/bin/python'
 
 
 " Syntastic
 " autocmd BufWritePost *.py call Flake8()
 " Ignore line length errors
+" let g:syntastic_python_checkers = ['flake8']
+" let g:syntastic_python_python_args = "--ignore=E501,W503,E702"
 let g:syntastic_python_flake8_args = "--ignore=E501,W503,E702"
-let g:syntastic_python_flake8_args = "--max-line-length=120"
+let g:syntastic_python_flake8_args = "--ignore=W503,E702 --max-line-length=120"
 let g:syntastic_python_pyflakes_exe = 'python3 -m pyflakes'
 
 " ale linter thing
@@ -122,6 +128,7 @@ let g:ale_linters = {
 \   'javascript': ['eslint'],
 \}
 " let g:ale_linters_explicit = 1
-let g:ale_python_flake8_options = "--ignore=E702 --max-line-length=120"
+" let g:ale_python_python_options = "--ignore=E702"
+let g:ale_python_flake8_options = "--ignore=W503,E702 --max-line-length=120"
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
