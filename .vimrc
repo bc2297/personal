@@ -1,25 +1,26 @@
 " " first install vundle. visit the github page
 " set nocompatible              " be iMproved, required
 " filetype off                  " required
-" 
+"
 " " set the runtime path to include Vundle and initialize
 " set rtp+=~/.vim/bundle/Vundle.vim
 " call vundle#begin()
 " " alternatively, pass a path where Vundle should install plugins
 " "call vundle#begin('~/some/path/here')
 call plug#begin()
-" 
+"
 " " let Vundle manage Vundle, required
 " Plugin 'VundleVim/Vundle.vim'
-" 
+"
 " " The following are examples of different formats supported.
 " " Keep Plugin commands between vundle#begin/end.
 " " plugin on GitHub repo
 " Plugin 'scrooloose/nerdtree'
 Plug 'preservim/nerdtree'
 " Plugin 'tmhedberg/SimpylFold'
-Plug 'tmhedberg/SimpylFold'
+" Plug 'tmhedberg/SimpylFold'
 " Plugin 'vim-scripts/indentpython.vim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'vim-scripts/indentpython.vim'
 " Plugin 'Valloric/YouCompleteMe'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -30,6 +31,8 @@ Plug 'bitc/vim-bad-whitespace'
 Plug 'morhetz/gruvbox'
 " Plugin 'dense-analysis/ale'
 Plug 'dense-analysis/ale'
+Plug 'tpope/vim-fugitive'
+Plug 'vim-autoformat/vim-autoformat'
 " " All of your Plugins must be added before the following line
 " call vundle#end()            " required
 call plug#end()
@@ -48,7 +51,7 @@ filetype plugin indent on    " required
 
 " Show line numbers
 set number
-set colorcolumn=119
+set colorcolumn=87
 
 " Simple pane navigation
 nnoremap <C-J> <C-W><C-J>
@@ -62,20 +65,21 @@ set splitright
 
 " python PEP8 indentation
 au BufNewFile,BufRead *.py
-	\ set tabstop=4 |
-	\ set softtabstop=4 |
-	\ set shiftwidth=4 |
-	\ set expandtab |
-	\ set autoindent |
-	\ set fileformat=unix
+			\ set tabstop=4 |
+			\ set softtabstop=4 |
+			\ set shiftwidth=4 |
+			\ set expandtab |
+			\ set autoindent |
+			\ set fileformat=unix
 
 " jump to previous location
 if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal! g`\"" | endif
+	au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+				\| exe "normal! g`\"" | endif
 endif
 
-let g:python3_host_prog = '/usr/local/opt/python@3.10/libexec/bin/python'
+" let g:python3_host_prog = '/usr/local/opt/python@3.10/libexec/bin/python'
+let g:python3_host_prog = '~/.pyenv/shims/python'
 
 " Nerdtree commands
 
@@ -102,16 +106,18 @@ syntax enable
 
 " Simpylfold
 
-" show docstrings in preview
-let g:SimpylFold_docstring_preview=1
-
-" don't fold docstrings
-let g:SimpylFold_fold_docstring=0
-let b:SimpylFold_fold_docstring=0
-
-" don't fold imports
-let g:SimpylFold_fold_import=0
-let b:SimpylFold_fold_import=0
+" " show docstrings in preview
+" let g:SimpylFold_docstring_preview=1
+"
+" " don't fold docstrings
+" let g:SimpylFold_fold_docstring=0
+" let b:SimpylFold_fold_docstring=0
+"
+" " don't fold imports
+" let g:SimpylFold_fold_import=0
+" let b:SimpylFold_fold_import=0
+"
+set foldmethod=indent
 
 
 " YouCompleteMe
@@ -123,22 +129,23 @@ let b:SimpylFold_fold_import=0
 " let g:syntastic_python_checkers = ['flake8']
 " let g:syntastic_python_python_args = "--ignore=E501,W503,E702"
 let g:syntastic_python_flake8_args = "--ignore=E501,W503,E702"
-let g:syntastic_python_flake8_args = "--ignore=W503,E702 --max-line-length=120"
+let g:syntastic_python_flake8_args = "--ignore=W503,E702,E203 --max-line-length=88"
 let g:syntastic_python_pyflakes_exe = 'python3 -m pyflakes'
 
 " ale linter thing
 let g:ale_linters = {
-\   'javascript': ['eslint'],
-\}
+			\   'javascript': ['eslint'],
+			\}
 " let g:ale_linters_explicit = 1
 " let g:ale_python_python_options = "--ignore=E702"
-let g:ale_python_flake8_options = "--ignore=W503,E702,E402,YCM112,YCM115,YCM201,YCM202 --max-line-length=120"
+let g:ale_python_flake8_options = "--ignore=W503,E203,E702,E402,YCM112,YCM115,YCM201,YCM202 --max-line-length=88"
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
 
 " COC Config
 " " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
 " unicode characters in the file autoload/float.vim
+let g:coc_config_home = '~/.brandon_personal/'
 set encoding=utf-8
 
 " TextEdit might fail if hidden is not set.
@@ -161,35 +168,69 @@ set shortmess+=c
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
 if has("nvim-0.5.0") || has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
+	" Recently vim can merge signcolumn and number column into one
+	set signcolumn=number
 else
-  set signcolumn=yes
+	set signcolumn=yes
 endif
 
-" Use tab for trigger completion with characters ahead and navigate.
+" " Use tab for trigger completion with characters ahead and navigate.
+" " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" " other plugin before putting this into your config.
+" inoremap <silent><expr> <TAB>
+"			\ pumvisible() ? "\<C-n>" :
+"			\ <SID>check_back_space() ? "\<TAB>" :
+"			\ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" function! s:check_back_space() abort
+"	let col = col('.') - 1
+"	return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
+"
+"
+" New version
+"
+"
+" Use tab for trigger completion with characters ahead and navigate
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
+" other plugin before putting this into your config
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+			\ coc#pum#visible() ? coc#pum#next(1) :
+			\ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+			\ CheckBackspace() ? "\<Tab>" :
+			\ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+			\: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" this next commands removes hitting enter twice
+" inoremap <silent><expr> <CR> coc#pum#visible() ? "\<C-y><CR>" : "\<CR>"
+
+function! CheckBackspace() abort
+	let col = col('.') - 1
+	return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+
+" New Version end
+
 " Use <c-space> to trigger completion.
 if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
+	inoremap <silent><expr> <c-space> coc#refresh()
 else
-  inoremap <silent><expr> <c-@> coc#refresh()
+	inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
 " Make <CR> auto-select the first completion item and notify coc.nvim to
 " format on enter, <cr> could be remapped by other vim plugin
 " inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 "                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+"
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -205,13 +246,13 @@ nmap <silent> gr <Plug>(coc-references)
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
+	if (index(['vim','help'], &filetype) >= 0)
+		execute 'h '.expand('<cword>')
+	elseif (coc#rpc#ready())
+		call CocActionAsync('doHover')
+	else
+		execute '!' . &keywordprg . " " . expand('<cword>')
+	endif
 endfunction
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -224,11 +265,11 @@ xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+	autocmd!
+	" Setup formatexpr specified filetype(s).
+	autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+	" Update signature help on jump placeholder.
+	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
 " Applying codeAction to the selected region.
@@ -257,12 +298,12 @@ omap ac <Plug>(coc-classobj-a)
 
 " Remap <C-f> and <C-b> for scroll float windows/popups.
 if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+	nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+	nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+	inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+	inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+	vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+	vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 endif
 
 " Use CTRL-S for selections ranges.
@@ -303,3 +344,8 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " COC Config end
+" COC snippets start
+" set snippets.userSnippetsDirectory = './snippets'
+"
+"Autoformat on file save
+au BufWrite * :Autoformat
