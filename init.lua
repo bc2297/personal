@@ -1,4 +1,5 @@
 vim.opt.foldmethod = "indent"
+vim.opt.undofile = true
 vim.cmd([[
 " " first install vundle. visit the github page
 " set nocompatible              " be iMproved, required
@@ -9,7 +10,7 @@ vim.cmd([[
 " call vundle#begin()
 " " alternatively, pass a path where Vundle should install plugins
 " "call vundle#begin('~/some/path/here')
-call plug#begin()
+call plug#begin('~/.local/share/nvim/site/plugged')
 "
 " " let Vundle manage Vundle, required
 " Plugin 'VundleVim/Vundle.vim'
@@ -35,6 +36,7 @@ Plug 'morhetz/gruvbox'
 Plug 'dense-analysis/ale'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-autoformat/vim-autoformat'
+Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
 " " All of your Plugins must be added before the following line
 " call vundle#end()            " required
 call plug#end()
@@ -50,6 +52,8 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
+
+let mapleader=","
 
 " Show line numbers
 set number
@@ -80,8 +84,7 @@ if has("autocmd")
 	\| exe "normal! g`\"" | endif
 	endif
 
-	" let g:python3_host_prog = '/usr/local/opt/python@3.10/libexec/bin/python'
-	let g:python3_host_prog = '~/.pyenv/shims/python'
+	let g:python3_host_prog = '~/.virtualenvs/neovim/bin/python'
 
 	" Nerdtree commands
 
@@ -137,6 +140,9 @@ if has("autocmd")
 	let g:syntastic_python_flake8_args = "--ignore=E501,W503,E702"
 	let g:syntastic_python_flake8_args = "--ignore=W503,E702,E203 --max-line-length=88"
 	let g:syntastic_python_pyflakes_exe = 'python3 -m pyflakes'
+
+	" doge docstring
+	let g:doge_doc_standard_python = 'google'
 
 	" ale linter thing
 	let g:ale_linters = {
@@ -354,5 +360,5 @@ if has("autocmd")
 						" set snippets.userSnippetsDirectory = './snippets'
 						"
 						"Autoformat on file save
-						au BufWrite * :Autoformat
+						" au BufWrite * :Autoformat
 						]])
