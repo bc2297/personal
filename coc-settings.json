@@ -3,5 +3,6 @@
     "pyright.enable": false,
     "snippets.userSnippetsDirectory": "~/.brandon_personal/snippets",
     "suggest.enablePreselect": true,
-    "suggest.noselect":true
+    "suggest.noselect": true,
+    "snippets.ultisnips.pythonPrompt": false
 }

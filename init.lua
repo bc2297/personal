@@ -37,6 +37,9 @@ Plug 'dense-analysis/ale'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-autoformat/vim-autoformat'
 Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
+
+Plug 'nvim-lua/plenary.nvim'
+Plug 'greggh/claude-code.nvim'
 " " All of your Plugins must be added before the following line
 " call vundle#end()            " required
 call plug#end()
@@ -77,6 +80,11 @@ au BufNewFile,BufRead *.py
 \ set expandtab |
 \ set autoindent |
 \ set fileformat=unix
+
+lua require('claude-code').setup()
+
+" show file name at top of split
+set winbar=%f
 
 " jump to previous location
 if has("autocmd")
